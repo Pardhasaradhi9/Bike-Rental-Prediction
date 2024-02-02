@@ -39,14 +39,76 @@ hist_temp <- ggplot(data, aes(x = temp)) +
   labs(x = "Temperature", y = "Frequency") +
   ggtitle("Distribution of Temperature")
 
+hist_atemp <- ggplot(data, aes(x = atemp)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") +
+  labs(x = "Feeling Temperature", y = "Frequency") +
+  ggtitle("Distribution of Feeling Temperature")
+
+hist_hum <- ggplot(data, aes(x = hum)) +
+  geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") +
+  labs(x = "Humidity", y = "Frequency") +
+  ggtitle("Distribution of Humidity")
+
+hist_windspeed <- ggplot(data, aes(x = windspeed)) +
+  geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") +
+  labs(x = "Windspeed", y = "Frequency") +
+  ggtitle("Distribution of Windspeed")
+
+
 # Bar plots for categorical variables
 bar_season <- ggplot(data, aes(x = factor(season))) +
   geom_bar(fill = "skyblue", color = "black") +
   labs(x = "Season", y = "Frequency") +
   ggtitle("Distribution of Seasons")
 
+bar_yr <- ggplot(data, aes(x = factor(yr))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Year", y = "Frequency") +
+  ggtitle("Distribution of Years")
+
+bar_mnth <- ggplot(data, aes(x = factor(mnth))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Month", y = "Frequency") +
+  ggtitle("Distribution of Months")
+
+bar_holiday <- ggplot(data, aes(x = factor(holiday))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Holiday", y = "Frequency") +
+  ggtitle("Distribution of Holidays")
+
+bar_weekday <- ggplot(data, aes(x = factor(weekday))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Weekday", y = "Frequency") +
+  ggtitle("Distribution of Weekdays")
+
+bar_workingday <- ggplot(data, aes(x = factor(workingday))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Working Day", y = "Frequency") +
+  ggtitle("Distribution of Working Days")
+
+bar_weathersit <- ggplot(data, aes(x = factor(weathersit))) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Weather Situation", y = "Frequency") +
+  ggtitle("Distribution of Weather Situations")
+
+
 # Arrange plots
-plot_arrangement <- plot_grid(hist_temp, bar_season, ncol = 2)
+# Arrange histograms
+hist_page <- ggarrange(
+  hist_temp, hist_atemp, hist_hum, hist_windspeed,
+  ncol = 2, nrow = 2
+)
+
+# Arrange bar plots
+bar_page <- ggarrange(
+  bar_season, bar_yr, bar_mnth,
+  bar_holiday, bar_weekday, bar_workingday,
+  bar_weathersit,
+  ncol = 3, nrow = 3
+)
+
+hist_page
+bar_page
 
 # Seasonal Analysis
 # Line plot for bike rental trends by season
@@ -57,9 +119,11 @@ box_season <- ggplot(data, aes(x = season, y = cnt, fill = season)) +
   geom_boxplot() +
   labs(x = "Season", y = "Bike Rentals") +
   ggtitle("Bike Rental Trends by Season")
+box_season
 
 # Correlation matrix
 correlation_matrix <- cor(data[, c("temp", "atemp", "hum", "windspeed", "casual", "registered", "cnt")])
+correlation_matrix
 
 # Plot Monthly Distribution of Total Bikes Rented
 monthly_distribution <- ggplot(data, aes(x = mnth, y = cnt)) +
@@ -67,6 +131,7 @@ monthly_distribution <- ggplot(data, aes(x = mnth, y = cnt)) +
   labs(x = "Month", y = "Total Bikes Rented", title = "Monthly Distribution of Total Bikes Rented") +
   scale_x_discrete(labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) +
   theme_minimal()
+monthly_distribution
 
 # Plot Yearly Distribution of Total Bikes Rented
 yearly_distribution <- ggplot(data, aes(x = yr, y = cnt)) +
@@ -74,12 +139,14 @@ yearly_distribution <- ggplot(data, aes(x = yr, y = cnt)) +
   labs(x = "Year", y = "Total Bikes Rented", title = "Yearly Distribution of Total Bikes Rented") +
   scale_x_discrete(labels = c("2011", "2012")) +
   theme_minimal()
+yearly_distribution
 
 # Plot Boxplot for Outliers Analysis
 outliers_boxplot <- ggplot(data, aes(x = "", y = cnt)) +
   geom_boxplot(fill = "skyblue", color = "black") +
   labs(x = "", y = "Total Bikes Rented", title = "Boxplot for Outliers Analysis") +
   theme_minimal()
+outliers_boxplot
 
 # Splitting the data
 set.seed(99)  # Set seed for reproducibility
